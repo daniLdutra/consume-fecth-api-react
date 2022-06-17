@@ -1,33 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
-type Repository = {
-  full_name: string;
-  description: string;
-};
+import { Repo } from './pages/Repo';
+import Repos from './pages/Repos';
 
-function App() {
-  const [repositories, setRepositories] = useState<Repository[]>([]);
-
-  useEffect(() => {
-    fetch('https://api.github.com/users/daniLdutra/repos')
-      .then((response) => response.json())
-      .then((data) => {
-        setRepositories(data);
-      });
-  }, []);
-
+export function App() {
   return (
-    <ul>
-      {repositories.map((repo) => {
-        return (
-          <li key={repo.full_name}>
-            <strong>{repo.full_name}</strong>
-            <p>{repo.description}</p>
-          </li>
-        );
-      })}
-    </ul>
+    <Routes>
+      <Route path="/" element={<Repos />} />
+      <Route path="/repos/*" element={<Repo />} />
+    </Routes>
   );
 }
-
-export default App;
