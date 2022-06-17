@@ -1,25 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+
+type Repository = {
+  full_name: string;
+  description: string;
+};
 
 function App() {
+  const [repositories, setRepositories] = useState<Repository[]>([]);
+
+  useEffect(() => {
+    fetch('https://api.github.com/users/daniLdutra/repos')
+      .then((response) => response.json())
+      .then((data) => {
+        setRepositories(data);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ul>
+      {repositories.map((repo) => {
+        return (
+          <li key={repo.full_name}>
+            <strong>{repo.full_name}</strong>
+            <p>{repo.description}</p>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
